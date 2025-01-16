@@ -28,6 +28,5 @@ allow-direct-references = true
 packages = ["src/vrchat_ime_chat"]
 
 [tool.rye.scripts]
-build = "python -m nuitka --follow-imports --windows-disable-console --output-dir=build src/main.py"
+build = "python -m nuitka --enable-plugin=tk-inter --follow-imports --standalone --onefile --output-dir=build src/main.py"
 clean = "rm -rf build/* *.build *.dist *.onefile-build"
-
