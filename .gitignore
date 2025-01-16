@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 仮想環境
+.venv/
+venv/
+ENV/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Nuitkaビルド
+*.build/
+*.dist/
+*.onefile-build/
+
+# IDE (VSCode)
+.vscode/
+*.code-workspace
+
+# その他
+*.log
+.DS_Store

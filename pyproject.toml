@@ -1,0 +1,33 @@
+[project]
+name = "vrchat-ime-chat"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "⛐", email = "26d0@tuta.io" }
+]
+dependencies = [
+    "customtkinter>=5.2.2",
+    "python-osc>=1.9.3",
+    "nuitka>=2.5.9",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vrchat_ime_chat"]
+
+[tool.rye.scripts]
+build = "python -m nuitka --follow-imports --windows-disable-console --output-dir=build src/main.py"
+clean = "rm -rf build/* *.build *.dist *.onefile-build"
+
