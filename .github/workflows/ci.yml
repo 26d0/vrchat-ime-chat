@@ -10,12 +10,27 @@ jobs:
   setup:
     runs-on: windows-latest
     outputs:
-      cache-key: ${{ steps.cache-key.outputs.key }}
+      deps-hash: ${{ steps.hash.outputs.hash }}
     
     steps:
     - uses: actions/checkout@v4
 
+    - name: Generate dependency hash
+      id: hash
+      shell: pwsh
+      run: |
+        $hash = (Get-FileHash -Path pyproject.toml,uv.lock -Algorithm SHA256 | ForEach-Object {$_.Hash}) -join "-"
+        echo "hash=$hash" >> $env:GITHUB_OUTPUT
+
+    - name: Cache VS Build Tools
+      id: cache-build-tools
+      uses: actions/cache@v3
+      with:
+        path: C:\BuildTools
+        key: vs-buildtools-${{ runner.os }}-2022
+
     - name: Install Visual Studio Build Tools
+      if: steps.cache-build-tools.outputs.cache-hit != 'true'
       shell: pwsh
       run: |
         Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vs_buildtools.exe" -OutFile "vs_buildtools.exe"
@@ -30,6 +45,10 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.12'
+        cache: 'pip'
+        cache-dependency-path: |
+          pyproject.toml
+          uv.lock
         
     - name: Install UV
       run: |
@@ -39,21 +58,19 @@ jobs:
     - name: Setup virtual environment
       run: uv venv
 
+    - name: Cache virtual environment
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ steps.hash.outputs.hash }}
+        restore-keys: |
+          venv-${{ runner.os }}-
+
     - name: Install dependencies
       shell: pwsh
       run: |
         .\.venv\Scripts\Activate.ps1
         uv pip install -e .
-
-    - name: Generate cache key
-      id: cache-key
-      run: echo "key=${{ github.sha }}" >> $GITHUB_OUTPUT
-
-    - name: Cache virtual environment
-      uses: actions/cache@v3
-      with:
-        path: .venv
-        key: venv-${{ steps.cache-key.outputs.key }}
 
   lint:
     needs: setup
@@ -71,7 +88,17 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .venv
-        key: venv-${{ needs.setup.outputs.cache-key }}
+        key: venv-${{ runner.os }}-${{ needs.setup.outputs.deps-hash }}
+        restore-keys: |
+          venv-${{ runner.os }}-
+
+    - name: Cache ruff
+      uses: actions/cache@v3
+      with:
+        path: ~\AppData\Local\ruff
+        key: ruff-${{ runner.os }}-${{ hashFiles('**/*.py') }}
+        restore-keys: |
+          ruff-${{ runner.os }}-
 
     - name: Run linting
       shell: pwsh
@@ -87,16 +114,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install Visual Studio Build Tools
-      shell: pwsh
-      run: |
-        Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vs_buildtools.exe" -OutFile "vs_buildtools.exe"
-        Start-Process -FilePath "vs_buildtools.exe" -ArgumentList "--quiet", "--wait", "--norestart", "--nocache", `
-        "--installPath", "C:\BuildTools", `
-        "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64", `
-        "--add", "Microsoft.VisualStudio.Component.Windows10SDK.19041" `
-        -Wait -NoNewWindow
-        Remove-Item "vs_buildtools.exe"
+    - name: Restore VS Build Tools from cache
+      uses: actions/cache@v3
+      with:
+        path: C:\BuildTools
+        key: vs-buildtools-${{ runner.os }}-2022
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -107,7 +129,19 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .venv
-        key: venv-${{ needs.setup.outputs.cache-key }}
+        key: venv-${{ runner.os }}-${{ needs.setup.outputs.deps-hash }}
+        restore-keys: |
+          venv-${{ runner.os }}-
+
+    - name: Cache build artifacts
+      uses: actions/cache@v3
+      with:
+        path: |
+          target
+          build
+        key: build-${{ runner.os }}-${{ github.sha }}
+        restore-keys: |
+          build-${{ runner.os }}-
         
     - name: Build application
       shell: pwsh
