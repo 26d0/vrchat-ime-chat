@@ -1,7 +1,10 @@
 """設定ウィンドウモジュール."""
 
 from __future__ import annotations
-from typing import TYPE_CHECKING, Callable, Literal
+
+from collections.abc import Callable
+from typing import TYPE_CHECKING
+from typing import Literal
 
 import customtkinter as ctk
 
@@ -21,7 +24,7 @@ class SettingsWindow(ctk.CTkToplevel):
         on_close: Callable[[], None],
     ) -> None:
         """設定ウィンドウを初期化する.
-        
+
         Args:
             parent: 親ウィンドウ
             current_config: 現在の設定
@@ -37,7 +40,7 @@ class SettingsWindow(ctk.CTkToplevel):
         self.on_theme_change = on_theme_change
         self.on_close = on_close
         self._selected_theme = current_config["theme"]
-        
+
         # 必要なUIが構築されるまで少し待つ
         self.after(100, lambda: self._setup_window())
 
@@ -65,7 +68,7 @@ class SettingsWindow(ctk.CTkToplevel):
         radio_frame.pack(fill="x", pady=(0, 16))  # 下部の余白を増やす
 
         theme_var = ctk.StringVar(value=self.current_config["theme"])
-        
+
         # テーマ選択ラジオボタン
         for theme, label in [("light", "ライト"), ("dark", "ダーク")]:
             radio = ctk.CTkRadioButton(
@@ -95,7 +98,7 @@ class SettingsWindow(ctk.CTkToplevel):
 
     def _on_theme_select(self, theme: THEMES) -> None:
         """テーマが選択された時の処理.
-        
+
         Args:
             theme: 選択されたテーマ
         """

@@ -2,4 +2,15 @@ version: '3'
 tasks:
   make:
     cmds:
-      - nuitka --enable-plugin=tk-inter --follow-imports --standalone --onefile --windows-console-mode=disable --windows-icon-from-ico=src/logo.ico --output-dir=build --output-filename=vic src/main.py
+      - nuitka --enable-plugin=tk-inter
+        --follow-imports
+        --standalone
+        --onefile
+        --windows-console-mode=disable
+        --windows-icon-from-ico=src/logo.ico
+        --include-data-files=src/logo.png=logo.png
+        --include-data-files=src/logo.ico=logo.ico
+        --output-dir=build
+        --output-filename=vic
+        --assume-yes-for-downloads
+        src/main.py

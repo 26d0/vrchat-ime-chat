@@ -34,7 +34,7 @@ cd vrchat-ime-chat
 uv venv
 source .venv/bin/activate  # Linuxの場合
 .venv\Scripts\activate     # Windowsの場合
-uv pip install -r requirements.lock
+uv sync
 ```
 
 ### 📦 必要な依存パッケージ
@@ -87,17 +87,8 @@ vrchat-ime-chat/
 ```
 
 ## 📦 ビルド方法
-
-Task（go-task）を使用してスタンドアロン実行ファイルを作成できます：
-
-1. まず、go-taskをインストール：
 ```shell
-go install github.com/go-task/task/v3/cmd/task@latest
-```
-
-2. 実行ファイルのビルド：
-```shell
-task make
+uv run task make
 ```
 
 ### ビルドの特徴

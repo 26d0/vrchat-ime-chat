@@ -1,9 +1,11 @@
 """VRChat IME の設定管理モジュール."""
 
 from __future__ import annotations
+
 import json
 from pathlib import Path
-from typing import Literal, TypedDict
+from typing import Literal
+from typing import TypedDict
 
 
 class ConfigDict(TypedDict):
@@ -27,13 +29,13 @@ class Settings:
 
     def load_config(self) -> ConfigDict:
         """設定ファイルを読み込む.
-        
+
         Returns:
             ConfigDict: 読み込んだ設定
         """
         try:
             if self.CONFIG_PATH.exists():
-                with open(self.CONFIG_PATH, "r", encoding="utf-8") as f:
+                with open(self.CONFIG_PATH, encoding="utf-8") as f:
                     return json.load(f)
             else:
                 self.save_config(self.DEFAULT_CONFIG)
@@ -44,7 +46,7 @@ class Settings:
 
     def save_config(self, config: ConfigDict) -> None:
         """設定をファイルに保存する.
-        
+
         Args:
             config: 保存する設定
         """

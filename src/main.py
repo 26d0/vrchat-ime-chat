@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import platform
 import signal
 import sys
 import types
@@ -9,12 +10,14 @@ from pathlib import Path
 from tkinter import Event
 from typing import NoReturn
 
-from PIL import Image
 import customtkinter as ctk
+from PIL import Image
+from PIL import ImageTk
 
+from osc_client import VRChatOSC
 from settings import Settings
 from settings_window import SettingsWindow
-from osc_client import VRChatOSC
+
 
 class VRChatIME(ctk.CTk):
     """VRChatのチャットボックスにテキストを送信するためのGUIアプリケーション."""
@@ -31,7 +34,7 @@ class VRChatIME(ctk.CTk):
 
         # テーマを適用
         ctk.set_appearance_mode(self.settings.config["theme"])
-        
+
         self.setup_window()
         self.setup_ui()
 
@@ -43,17 +46,59 @@ class VRChatIME(ctk.CTk):
 
         # ウィンドウアイコンを設定
         try:
-            logo_path = Path(__file__).parent / "logo.png"
-            icon_path = Path(__file__).parent / "logo.ico"
-            
-            # icoファイルが存在しない場合のみ変換
-            if logo_path.exists() and not icon_path.exists():
-                img = Image.open(str(logo_path))
-                img.save(str(icon_path), format="ICO", sizes=[(32, 32)])
-            
-            # icoファイルが存在する場合はそれを使用
-            if icon_path.exists():
-                self.iconbitmap(str(icon_path))
+            logo_png = Path(__file__).parent / "logo.png"
+            logo_ico = Path(__file__).parent / "logo.ico"
+
+            base_path = getattr(sys, '_MEIPASS', str(Path(__file__).parent))
+            logo_png = Path(base_path) / "logo.png"
+            logo_ico = Path(base_path) / "logo.ico"
+
+            if platform.system() == "Windows":
+                # Windows環境ではicoファイルを使用
+                if not logo_ico.exists() and logo_png.exists():
+                    # PNGからICOを生成（複数サイズ対応）
+                    img = Image.open(str(logo_png))
+                    # Windowsでよく使用されるサイズを全て含める（小さい順）
+                    sizes = [
+                        (16, 16), (24, 24), (32, 32),
+                        (48, 48), (64, 64), (128, 128),
+                        (256, 256)
+                    ]
+                    icons = []
+                    for size in sizes:
+                        scaled_img = img.resize(size, Image.Resampling.LANCZOS)
+                        icons.append(scaled_img)
+                    icons[0].save(
+                        str(logo_ico),
+                        format="ICO",
+                        append_images=icons[1:],
+                        sizes=sizes,
+                        quality=95,
+                        optimize=True
+                    )
+
+                # 実行ファイル化時とソースコード実行時の両方に対応
+                try:
+                    if logo_ico.exists():
+                        self.iconbitmap(str(logo_ico))
+                    elif logo_png.exists():
+                        # icoファイルが見つからない場合はPNGから直接設定
+                        icon_image = Image.open(str(logo_png))
+                        icon_photo = ImageTk.PhotoImage(icon_image)
+                        self.wm_iconphoto(True, icon_photo)
+                        self._icon_photo = icon_photo
+                except Exception as e:
+                    print(f"Windowsアイコン設定エラー: {e}")
+            else:
+                # その他の環境ではPNGを直接使用
+                try:
+                    if logo_png.exists():
+                        icon_image = Image.open(str(logo_png))
+                        icon_photo = ImageTk.PhotoImage(icon_image)
+                        self.wm_iconphoto(True, icon_photo)
+                        self._icon_photo = icon_photo
+                except Exception as e:
+                    print(f"アイコン設定エラー: {e}")
         except Exception as e:
             print(f"アイコンの設定に失敗しました: {e}")
 
@@ -124,13 +169,13 @@ class VRChatIME(ctk.CTk):
 
     def change_theme(self, theme: str) -> None:
         """テーマを変更する.
-        
+
         Args:
             theme: 設定するテーマ（"dark" または "light"）
         """
         if theme == self.settings.config["theme"]:
             return
-        
+
         self.settings.config["theme"] = theme
         ctk.set_appearance_mode(theme)
         self.settings.save_config(self.settings.config)
@@ -155,10 +200,10 @@ class VRChatIME(ctk.CTk):
 
     def on_enter(self, event: Event) -> str | None:
         """Enterキーが押された時のイベントハンドラ.
-        
+
         Args:
             event: キーボードイベント
-        
+
         Returns:
             str | None: "break"を返して通常の改行を防ぐ、またはNone
         """

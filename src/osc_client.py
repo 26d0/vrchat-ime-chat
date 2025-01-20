@@ -10,7 +10,7 @@ class VRChatOSC:
 
     def __init__(self, host: str = "127.0.0.1", port: int = 9000) -> None:
         """OSCクライアントを初期化する.
-        
+
         Args:
             host: 接続先ホスト
             port: 接続先ポート
@@ -19,7 +19,7 @@ class VRChatOSC:
 
     def send_chat_message(self, message: str) -> None:
         """チャットメッセージを送信する.
-        
+
         Args:
             message: 送信するメッセージ
         """
