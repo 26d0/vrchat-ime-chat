@@ -7,8 +7,10 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  setup:
     runs-on: windows-latest
+    outputs:
+      cache-key: ${{ steps.cache-key.outputs.key }}
     
     steps:
     - uses: actions/checkout@v4
@@ -36,26 +38,83 @@ jobs:
         
     - name: Setup virtual environment
       run: uv venv
-        
+
     - name: Install dependencies
       shell: pwsh
       run: |
         .\.venv\Scripts\Activate.ps1
         uv pip install -e .
-        
-    - name: Lint with ruff
+
+    - name: Generate cache key
+      id: cache-key
+      run: echo "key=${{ github.sha }}" >> $GITHUB_OUTPUT
+
+    - name: Cache virtual environment
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ steps.cache-key.outputs.key }}
+
+  lint:
+    needs: setup
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Restore virtual environment
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ needs.setup.outputs.cache-key }}
+
+    - name: Run linting
       shell: pwsh
       run: |
         .\.venv\Scripts\Activate.ps1
         uv pip install ruff
         ruff check .
+
+  build:
+    needs: [setup, lint]
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Visual Studio Build Tools
+      shell: pwsh
+      run: |
+        Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vs_buildtools.exe" -OutFile "vs_buildtools.exe"
+        Start-Process -FilePath "vs_buildtools.exe" -ArgumentList "--quiet", "--wait", "--norestart", "--nocache", `
+        "--installPath", "C:\BuildTools", `
+        "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64", `
+        "--add", "Microsoft.VisualStudio.Component.Windows10SDK.19041" `
+        -Wait -NoNewWindow
+        Remove-Item "vs_buildtools.exe"
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Restore virtual environment
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ needs.setup.outputs.cache-key }}
         
-    - name: Build
+    - name: Build application
       shell: pwsh
       run: |
         .\.venv\Scripts\Activate.ps1
         uv run task make
-        
+
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
