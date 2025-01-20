@@ -7,40 +7,28 @@ on:
     branches: [ "main" ]
 
 jobs:
-  setup:
+  build:
     runs-on: windows-latest
-    outputs:
-      deps-hash: ${{ steps.hash.outputs.hash }}
     
     steps:
     - uses: actions/checkout@v4
 
-    - name: Generate dependency hash
-      id: hash
-      shell: pwsh
-      run: |
-        $hash = (Get-FileHash -Path pyproject.toml,uv.lock -Algorithm SHA256 | ForEach-Object {$_.Hash}) -join "-"
-        echo "hash=$hash" >> $env:GITHUB_OUTPUT
-
-    - name: Cache VS Build Tools
-      id: cache-build-tools
+    - name: Get latest successful VS Build Tools cache
       uses: actions/cache@v3
+      id: build-tools-cache
       with:
         path: C:\BuildTools
         key: vs-buildtools-${{ runner.os }}-2022
+        restore-keys: |
+          vs-buildtools-${{ runner.os }}-
 
-    - name: Install Visual Studio Build Tools
-      if: steps.cache-build-tools.outputs.cache-hit != 'true'
+    - name: Check VS Build Tools cache
+      if: steps.build-tools-cache.outputs.cache-hit != 'true'
       shell: pwsh
       run: |
-        Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vs_buildtools.exe" -OutFile "vs_buildtools.exe"
-        Start-Process -FilePath "vs_buildtools.exe" -ArgumentList "--quiet", "--wait", "--norestart", "--nocache", `
-        "--installPath", "C:\BuildTools", `
-        "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64", `
-        "--add", "Microsoft.VisualStudio.Component.Windows10SDK.19041" `
-        -Wait -NoNewWindow
-        Remove-Item "vs_buildtools.exe"
-    
+        Write-Error "VS Build Tools cache not found. Please run the setup-build-tools workflow first."
+        exit 1
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -49,6 +37,13 @@ jobs:
         cache-dependency-path: |
           pyproject.toml
           uv.lock
+
+    - name: Generate dependency hash
+      id: hash
+      shell: pwsh
+      run: |
+        $hash = (Get-FileHash -Path pyproject.toml,uv.lock -Algorithm SHA256 | ForEach-Object {$_.Hash}) -join "-"
+        echo "hash=$hash" >> $env:GITHUB_OUTPUT
         
     - name: Install UV
       run: |
@@ -72,31 +67,6 @@ jobs:
         .\.venv\Scripts\Activate.ps1
         uv pip install -e .
 
-  lint:
-    needs: setup
-    runs-on: windows-latest
-    
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
-
-    - name: Install UV
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install uv
-
-    - name: Restore virtual environment
-      uses: actions/cache@v3
-      with:
-        path: .venv
-        key: venv-${{ runner.os }}-${{ needs.setup.outputs.deps-hash }}
-        restore-keys: |
-          venv-${{ runner.os }}-
-
     - name: Cache ruff data
       uses: actions/cache@v3
       with:
@@ -105,43 +75,12 @@ jobs:
         restore-keys: |
           ruff-${{ runner.os }}-
 
-    - name: Run linting
+    - name: Lint
       shell: pwsh
       run: |
         .\.venv\Scripts\Activate.ps1
         uv pip install ruff
         ruff check .
-
-  build:
-    needs: [setup, lint]
-    runs-on: windows-latest
-    
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Restore VS Build Tools from cache
-      uses: actions/cache@v3
-      with:
-        path: C:\BuildTools
-        key: vs-buildtools-${{ runner.os }}-2022
-
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
-
-    - name: Install UV
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install uv
-
-    - name: Restore virtual environment
-      uses: actions/cache@v3
-      with:
-        path: .venv
-        key: venv-${{ runner.os }}-${{ needs.setup.outputs.deps-hash }}
-        restore-keys: |
-          venv-${{ runner.os }}-
 
     - name: Cache build artifacts
       uses: actions/cache@v3

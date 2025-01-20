@@ -1,0 +1,27 @@
+name: Setup Build Tools
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # 毎週日曜日の00:00に実行
+  workflow_dispatch:  # 手動実行用
+
+jobs:
+  setup-build-tools:
+    runs-on: windows-latest
+    steps:
+      - name: Install Visual Studio Build Tools
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vs_buildtools.exe" -OutFile "vs_buildtools.exe"
+          Start-Process -FilePath "vs_buildtools.exe" -ArgumentList "--quiet", "--wait", "--norestart", "--nocache", `
+          "--installPath", "C:\BuildTools", `
+          "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64", `
+          "--add", "Microsoft.VisualStudio.Component.Windows10SDK.19041" `
+          -Wait -NoNewWindow
+          Remove-Item "vs_buildtools.exe"
+
+      - name: Cache VS Build Tools
+        uses: actions/cache/save@v3
+        with:
+          path: C:\BuildTools
+          key: vs-buildtools-${{ runner.os }}-2022-${{ github.run_number }}
