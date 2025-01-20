@@ -11,7 +11,7 @@ dependencies = [
     "nuitka>=2.5.9",
 ]
 readme = "README.md"
-requires-python = ">= 3.8"
+requires-python = ">= 3.12"
 
 [build-system]
 requires = ["hatchling"]
@@ -32,5 +32,5 @@ clean = "rm -rf build/* *.build *.dist *.onefile-build"
 select = ["E", "F", "B", "I", "W"]
 ignore = []
 line-length = 88
-target-version = "py38"
+target-version = "py312"
 src = ["src"]
