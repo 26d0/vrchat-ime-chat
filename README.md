@@ -14,12 +14,13 @@ VRChatで使える、IME（Input Method Editor）対応のフローティング�
 - VRChatとのOSC連携
 - キーボードショートカットによる素早い送信（Enterキー）
 - Shift+Enterで複数行の入力が可能
+- 設定ウィンドウでの詳細なカスタマイズ
 
 ## 🚀 インストール方法
 
-1. Ryeをインストールしていない場合は、以下のコマンドでインストール：
+1. uvをインストールしていない場合は、以下のコマンドでインストール：
 ```shell
-curl -sSf https://rye-up.com/get | bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 2. リポジトリをクローンします：
@@ -30,7 +31,10 @@ cd vrchat-ime-chat
 
 3. 依存関係をインストールします：
 ```shell
-rye sync
+uv venv
+source .venv/bin/activate  # Linuxの場合
+.venv\Scripts\activate     # Windowsの場合
+uv pip install -r requirements.lock
 ```
 
 ### 📦 必要な依存パッケージ
@@ -39,6 +43,8 @@ rye sync
   - モダンなGUIインターフェースの実現に使用
 - **python-osc** (>=1.9.3)
   - VRChatとのOSC通信に使用
+- **pillow** (>=11.1.0)
+  - 画像処理とアイコンの表示に使用
 - **nuitka** (>=2.5.9)
   - スタンドアロン実行ファイルのビルドに使用
 
@@ -47,7 +53,7 @@ rye sync
 アプリケーションの起動：
 
 ```shell
-rye run python src/main.py
+python src/main.py
 ```
 
 起動すると、常に最前面に表示されるフローティングウィンドウが開きます。
@@ -59,6 +65,7 @@ rye run python src/main.py
    - Enterキーを押す
    - 「Send to VRChat」ボタンをクリック
 3. 複数行の入力が必要な場合は、Shift+Enterを使用
+4. 設定アイコンをクリックして、フォントサイズやウィンドウの透明度などをカスタマイズ
 
 ※ VRChatとの通信はOSCプロトコルを使用し、localhost:9000で行われます。
 
@@ -67,23 +74,30 @@ rye run python src/main.py
 ```
 vrchat-ime-chat/
 ├── src/
-│   └── main.py           # メインアプリケーションコード
+│   ├── main.py           # メインアプリケーションコード
+│   ├── osc_client.py     # OSC通信処理
+│   ├── settings.py       # 設定管理
+│   ├── settings_window.py # 設定ウィンドウUI
+│   ├── logo.ico         # アプリケーションアイコン
+│   └── logo.png         # ロゴ画像
 ├── pyproject.toml        # プロジェクト設定
+├── Taskfile.yaml        # ビルドタスク定義
 ├── requirements.lock     # 本番環境の依存関係
-├── requirements-dev.lock # 開発環境の依存関係
 └── README.md            # プロジェクトドキュメント
 ```
 
 ## 📦 ビルド方法
 
-Nuitkaを使用してスタンドアロン実行ファイルを作成できます：
+Task（go-task）を使用してスタンドアロン実行ファイルを作成できます：
 
+1. まず、go-taskをインストール：
 ```shell
-# 実行ファイルのビルド
-rye run build
+go install github.com/go-task/task/v3/cmd/task@latest
+```
 
-# ビルド成果物のクリーンアップ
-rye run clean
+2. 実行ファイルのビルド：
+```shell
+task make
 ```
 
 ### ビルドの特徴
@@ -91,6 +105,7 @@ rye run clean
 - Python環境不要のスタンドアロン実行ファイルを作成
 - Windows環境ではコンソールウィンドウを非表示に設定
 - 全ての依存関係を単一ファイルにパッケージング
+- カスタムアイコンを使用したWindows実行ファイル
 
 ## ❓ トラブルシューティング
 
@@ -99,14 +114,16 @@ rye run clean
 ### VRChatにメッセージが送信されない
 - ✅ VRChatのOSC設定が有効になっているか確認
 - ✅ ファイアウォールでポート9000が開放されているか確認
+- ✅ VRChatが起動しているか確認
 
 ### IMEが正しく動作しない
 - ✅ システムのIME設定を確認
-- ✅ フォント「Yu Gothic UI」がシステムにインストールされているか確認
+- ✅ 最新バージョンのアプリケーションを使用しているか確認
+- ✅ 他のアプリケーションでIMEが正常に動作するか確認
 
-### ウィンドウが表示されない
-- ✅ タスクマネージャーでプロセスが実行中か確認
-- ✅ 他のウィンドウの裏に隠れていないか確認
+### 設定が保存されない
+- ✅ アプリケーションが書き込み権限を持つディレクトリで実行されているか確認
+- ✅ 設定ファイルが破損していないか確認
 
 ## 📜 ライセンス
 

@@ -9,6 +9,7 @@ dependencies = [
     "customtkinter>=5.2.2",
     "python-osc>=1.9.3",
     "nuitka>=2.5.9",
+    "pillow>=11.1.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.12"
