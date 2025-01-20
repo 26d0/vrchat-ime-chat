@@ -11,31 +11,33 @@ jobs:
     runs-on: windows-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.12'
         
-    - name: Install dependencies
+    - name: Install UV
       run: |
         python -m pip install --upgrade pip
-        python -m pip install rye
-        rye --version
-        rye sync
+        python -m pip install uv
+        
+    - name: Install dependencies
+      run: uv pip install -e .
         
     - name: Lint with ruff
       run: |
-        python -m pip install ruff
+        uv pip install ruff
         ruff check .
         
     - name: Build
       shell: bash
-      run: rye run build
-      
+      run: |
+        python -m nuitka --enable-plugin=tk-inter --follow-imports --standalone --onefile --output-dir=build --output-filename=vic src/main.py
+        
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: vic
         path: build/vic.exe
