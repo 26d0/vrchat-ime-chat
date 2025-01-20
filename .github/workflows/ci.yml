@@ -12,6 +12,17 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
+
+    - name: Install Visual Studio Build Tools
+      shell: pwsh
+      run: |
+        Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vs_buildtools.exe" -OutFile "vs_buildtools.exe"
+        Start-Process -FilePath "vs_buildtools.exe" -ArgumentList "--quiet", "--wait", "--norestart", "--nocache", `
+        "--installPath", "C:\BuildTools", `
+        "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64", `
+        "--add", "Microsoft.VisualStudio.Component.Windows10SDK.19041" `
+        -Wait -NoNewWindow
+        Remove-Item "vs_buildtools.exe"
     
     - name: Set up Python
       uses: actions/setup-python@v5
