@@ -84,6 +84,11 @@ jobs:
       with:
         python-version: '3.12'
 
+    - name: Install UV
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install uv
+
     - name: Restore virtual environment
       uses: actions/cache@v3
       with:
@@ -92,10 +97,10 @@ jobs:
         restore-keys: |
           venv-${{ runner.os }}-
 
-    - name: Cache ruff
+    - name: Cache ruff data
       uses: actions/cache@v3
       with:
-        path: ~\AppData\Local\ruff
+        path: C:\Users\runneradmin\AppData\Local\ruff
         key: ruff-${{ runner.os }}-${{ hashFiles('**/*.py') }}
         restore-keys: |
           ruff-${{ runner.os }}-
@@ -124,6 +129,11 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.12'
+
+    - name: Install UV
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install uv
 
     - name: Restore virtual environment
       uses: actions/cache@v3
