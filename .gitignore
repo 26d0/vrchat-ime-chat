@@ -1,0 +1,27 @@
+/target/
+**/*.rs.bk
+*.pdb
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Debug files
+*.log
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Profiling and debugging
+perf.data
+perf.data.old
+flamegraph.svg

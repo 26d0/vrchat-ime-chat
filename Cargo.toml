@@ -1,0 +1,13 @@
+[package]
+name = "vic"
+version = "0.1.0"
+edition = "2021"
+description = "VRChat IME Chat Tool"
+authors = ["vic developers"]
+
+[dependencies]
+eframe = "0.30.0"
+rosc = "0.10.1"
+crossbeam-channel = "0.5.8"
+egui_extras = { version = "0.30.0", features = ["all_loaders"] }
+image = "0.24.7"
