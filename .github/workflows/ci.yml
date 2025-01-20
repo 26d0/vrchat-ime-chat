@@ -43,7 +43,7 @@ jobs:
       shell: pwsh
       run: |
         .\.venv\Scripts\Activate.ps1
-        python -m nuitka --enable-plugin=tk-inter --follow-imports --standalone --onefile --output-dir=build --output-filename=vic src/main.py
+        uv run task make
         
     - name: Upload artifact
       uses: actions/upload-artifact@v4

@@ -39,3 +39,4 @@ wheels/
 # その他
 *.log
 .DS_Store
+.ruff_cache/
