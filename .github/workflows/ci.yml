@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install rye-tool
+        rye sync
+        
+    - name: Lint with ruff
+      run: |
+        python -m pip install ruff
+        ruff check .
+        
+    - name: Build
+      run: rye run build
+      
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: vic
+        path: build/vic.exe

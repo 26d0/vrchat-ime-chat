@@ -1,7 +1,7 @@
 [project]
 name = "vrchat-ime-chat"
 version = "0.1.0"
-description = "Add your description here"
+description = "VRChat用のIME対応フローティングチャットウィンドウ"
 authors = [
     { name = "⛐", email = "26d0@tuta.io" }
 ]
@@ -24,9 +24,13 @@ dev-dependencies = []
 [tool.hatch.metadata]
 allow-direct-references = true
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/vrchat_ime_chat"]
-
 [tool.rye.scripts]
-build = "python -m nuitka --enable-plugin=tk-inter --follow-imports --standalone --onefile --output-dir=build src/main.py"
+build = "python -m nuitka --enable-plugin=tk-inter --follow-imports --standalone --onefile --output-dir=build --output-filename=vic src/main.py"
 clean = "rm -rf build/* *.build *.dist *.onefile-build"
+
+[tool.ruff]
+select = ["E", "F", "B", "I", "W"]
+ignore = []
+line-length = 88
+target-version = "py38"
+src = ["src"]
