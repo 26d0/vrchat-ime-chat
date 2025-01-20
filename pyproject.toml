@@ -24,8 +24,32 @@ allow-direct-references = true
 packages = ["src"]
 
 [tool.ruff]
-select = ["E", "F", "B", "I", "W"]
-ignore = []
-line-length = 88
 target-version = "py312"
+line-length = 88
 src = ["src"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "B",    # flake8-bugbear
+    "I",    # isort
+    "W",    # pycodestyle warnings
+    "C90",  # mccabe complexity
+    "N",    # pep8-naming
+    "D",    # pydocstring
+    "UP",   # pyupgrade
+    "ANN",  # flake8-annotations
+    "S",    # bandit
+    "A",    # flake8-builtins
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.isort]
+known-first-party = ["vrchat_ime_chat"]
+force-single-line = true
