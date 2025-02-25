@@ -1,0 +1,32 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { 
+  title = "VRChat IME Chat - VRChatで日本語入力",
+  description = "Windows IMEを使用してVRChatで快適に日本語入力ができるデスクトップアプリケーション"
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="og:title" content={title} />
+    <meta name="og:description" content={description} />
+  </head>
+  <body>
+    <div class="min-h-screen">
+      <slot />
+    </div>
+  </body>
+</html>
