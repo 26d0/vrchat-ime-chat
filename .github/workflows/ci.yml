@@ -53,9 +53,6 @@ jobs:
       - name: Type check frontend
         run: cd frontend && pnpm tsc --noEmit
 
-      - name: Test backend
-        run: go test ./...
-
   build:
     name: Build
     needs: test
@@ -103,7 +100,13 @@ jobs:
       - name: Install frontend dependencies
         run: cd frontend && pnpm install
 
-      - name: Build
+      - name: Build frontend
+        run: cd frontend && pnpm build
+
+      - name: Test backend
+        run: go test ./...
+
+      - name: Build with Wails
         run: wails build
 
       - name: Upload artifacts
