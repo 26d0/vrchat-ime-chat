@@ -264,7 +264,6 @@ export function SettingsDialog() {
           </div>
         </div>
       </dialog>
-    </>
   )
 }
 
