@@ -4,8 +4,8 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://26d0.github.io',
-  base: '/vrchat-ime-chat',
+  site: 'https://chat.gorem.cc',
+  base: '/',
   output: 'static',
   integrations: [tailwind()],
 });
