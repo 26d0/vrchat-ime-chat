@@ -1,0 +1,73 @@
+{
+  "app": {
+    "title": "VRChat IME Chat"
+  },
+  "settings": {
+    "title": "設定",
+    "description": "アプリケーションの外観、言語、動作を調整します",
+    "theme": "テーマ",
+    "language": "言語",
+    "close": "閉じる",
+    "open": "設定を開く",
+    "save": "設定を保存",
+    "saveAndClose": "保存して閉じる",
+    "changesSaved": "設定が正常に保存されました",
+    "system": "システム",
+    "light": "ライト",
+    "dark": "ダーク",
+    "english": "English",
+    "japanese": "日本語",
+    "kip": "Kip",
+    "systemDescription": "システムの設定に応じてライト/ダークテーマを自動的に切り替えます",
+    "lightDescription": "明るく見やすいライトテーマを使用します",
+    "darkDescription": "暗い環境での目の疲れを軽減するダークテーマを使用します",
+    "englishDescription": "Set the interface language to English",
+    "japaneseDescription": "インターフェースの言語を日本語に設定します",
+    "fontSize": "文字サイズ",
+    "small": "小",
+    "medium": "中",
+    "large": "大",
+    "smallFontDescription": "コンパクトな表示のために小さい文字サイズを使用します",
+    "mediumFontDescription": "標準的な文字サイズを使用します",
+    "largeFontDescription": "読みやすさを向上させるために大きい文字サイズを使用します",
+    "sendShortcut": "送信ショートカット",
+    "pressKeys": "キーを入力してください...",
+    "reset": "リセット",
+    "resetShortcut": "ショートカットを初期設定に戻す",
+    "typing_status": "入力状態の表示",
+    "typing_status_enabled": "有効",
+    "typing_status_disabled": "無効",
+    "typing_status_description": "テキスト入力中に他のユーザーに入力状態を表示します",
+    "themeChanged": "テーマを{{theme}}に変更しました",
+    "languageChanged": "言語を{{language}}に変更しました",
+    "fontSizeChanged": "文字サイズを{{size}}に変更しました",
+    "shortcutChanged": "送信ショートカットを更新しました",
+    "typingStatusEnabled": "入力状態の表示を有効にしました",
+    "typingStatusDisabled": "入力状態の表示を無効にしました"
+  },
+  "chat": {
+    "placeholder": "メッセージを入力...",
+    "send": "送信",
+    "clear": "クリア",
+    "shortcut": "Ctrl+Enter で送信",
+    "message_sent": "メッセージを送信しました",
+    "send_failed": "メッセージの送信に失敗しました",
+    "typing_status": "入力中..."
+  },
+  "status": {
+    "vrchat_running": "VRChat 接続中",
+    "vrchat_not_running": "VRChatが起動していません",
+    "vrchat_required": "メッセージを送信するにはVRChatが起動している必要があります",
+    "vrchat_check_failed": "VRChatの状態確認に失敗しました"
+  },
+  "history": {
+    "title": "メッセージ履歴",
+    "navigate": "キーで移動",
+    "clear": "履歴を削除",
+    "cleared": "メッセージ履歴を削除しました",
+    "messageDeleted": "メッセージを履歴から削除しました"
+  },
+  "common": {
+    "error": "エラー"
+  }
+}
