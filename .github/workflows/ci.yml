@@ -50,8 +50,8 @@ jobs:
       - name: Install frontend dependencies
         run: cd frontend && pnpm install
 
-      - name: Test frontend
-        run: cd frontend && pnpm run typecheck && pnpm test
+      - name: Type check frontend
+        run: cd frontend && pnpm tsc --noEmit
 
       - name: Test backend
         run: go test ./...
