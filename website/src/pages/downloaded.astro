@@ -1,0 +1,128 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+
+const downloadUrl = "https://github.com/26d0/vrchat-ime-chat/releases/latest/download/vic.exe";
+---
+
+<Layout>
+  <main class="max-w-[1200px] mx-auto px-6 md:px-8 overflow-hidden">
+    <div class="min-h-[90vh] flex items-center justify-center -mt-16">
+      <div class="text-center max-w-2xl animate-fade-up">
+        <div class="mb-8">
+          <ArrowDownTrayIcon className="w-16 h-16 mx-auto text-primary" />
+        </div>
+        <h1 class="text-4xl md:text-5xl font-semibold mb-6 gradient-text tracking-tight">
+          ダウンロードを開始しています
+        </h1>
+        <p class="text-xl text-zinc-500 mb-12 leading-relaxed">
+          ダウンロードが始まらない場合は、<a href={downloadUrl} class="text-primary hover:underline">こちら</a>をクリックしてください。
+        </p>
+
+        <div class="text-left mb-12 bg-white rounded-lg p-8 shadow-lg">
+          <h2 class="text-2xl font-semibold mb-6">使用方法</h2>
+          <div class="space-y-6 text-zinc-600">
+            <div>
+              <h3 class="text-lg font-semibold mb-2 text-zinc-900">起動方法</h3>
+              <p>ダウンロードしたvic.exeを実行するだけです。インストール作業は必要ありません。初回実行時、Windowsのセキュリティ警告が表示される場合がありますが、「詳細情報」→「実行」を選択してください。</p>
+            </div>
+
+            <div>
+              <h3 class="text-lg font-semibold mb-2 text-zinc-900">基本的な使い方</h3>
+              <ol class="space-y-2 list-decimal list-inside pl-4">
+                <li>vic.exeを起動すると、タスクトレイにアイコンが表示されます</li>
+                <li>VRChatを起動し、チャットウィンドウを開きます</li>
+                <li>通常通り日本語入力ができるようになります</li>
+              </ol>
+            </div>
+
+            <div>
+              <h3 class="text-lg font-semibold mb-2 text-zinc-900">注意点</h3>
+              <ul class="space-y-2 list-disc list-inside pl-4">
+                <li>ポータブルアプリケーションのため、アンインストールも不要です。vic.exeを削除するだけで完全に削除できます</li>
+                <li>入力ができない場合は、VRChatがフォーカスされているか確認してください</li>
+                <li>不具合報告は<a href="https://github.com/26d0/vrchat-ime-chat/issues" class="text-primary hover:underline">GitHubのIssues</a>にお願いします</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-center">
+          <a href="/" class="btn btn-lg px-8">
+            トップページに戻る
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    import confetti from 'canvas-confetti';
+    
+    // Get download URL from frontmatter
+    const downloadUrl = "https://github.com/26d0/vrchat-ime-chat/releases/latest/download/vic.exe";
+
+    // Add message element to show status
+    const statusElem = document.createElement('div');
+    statusElem.style.position = 'fixed';
+    statusElem.style.bottom = '20px';
+    statusElem.style.left = '50%';
+    statusElem.style.transform = 'translateX(-50%)';
+    statusElem.style.padding = '10px 20px';
+    statusElem.style.borderRadius = '5px';
+    statusElem.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+    statusElem.style.color = 'white';
+    statusElem.style.fontSize = '14px';
+    statusElem.style.display = 'none';
+    document.body.appendChild(statusElem);
+
+    function showStatus(message: string, isError = false) {
+      statusElem.textContent = message;
+      statusElem.style.backgroundColor = isError ? 'rgba(220, 38, 38, 0.9)' : 'rgba(0, 0, 0, 0.8)';
+      statusElem.style.display = 'block';
+      setTimeout(() => {
+        statusElem.style.display = 'none';
+      }, 5000);
+    }
+
+    // Trigger download and confetti when the page loads
+    window.onload = () => {
+      try {
+        // Start download
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = 'vic.exe';
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (err) {
+        console.error('Error triggering download:', err);
+      }
+
+      // Celebratory confetti effect
+      if (typeof confetti === 'undefined') return;
+
+      var duration = 15 * 1000;
+      var animationEnd = Date.now() + duration;
+      var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+      function randomInRange(min: number, max: number): number {
+        return Math.random() * (max - min) + min;
+      }
+
+      var interval = setInterval(function() {
+        var timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        var particleCount = 50 * (timeLeft / duration);
+        // since particles fall down, start a bit higher than random
+        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+      }, 250);
+    };
+  </script>
+</Layout>
