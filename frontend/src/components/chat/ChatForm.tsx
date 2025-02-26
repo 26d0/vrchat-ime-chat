@@ -204,6 +204,7 @@ export function ChatForm() {
         onClear={clearHistory}
         onDelete={deleteMessage}
         onClick={setMessage}
+        disabled={isLoading || !isVRChatRunning}
       />
     </form>
   );

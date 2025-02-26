@@ -9,9 +9,10 @@ interface MessageHistoryProps {
   onClear: () => void;
   onDelete: (index: number) => void;
   onClick?: (message: string) => void;
+  disabled?: boolean;
 }
 
-export function MessageHistory({ messages, currentIndex, onClear, onDelete, onClick }: MessageHistoryProps) {
+export function MessageHistory({ messages, currentIndex, onClear, onDelete, onClick, disabled }: MessageHistoryProps) {
   const { t } = useTranslation();
   const { fontSize } = useSettingsStore();
   
@@ -48,27 +49,31 @@ export function MessageHistory({ messages, currentIndex, onClear, onDelete, onCl
       </div>
       <div className="space-y-2">
         {displayMessages.reverse().map((item, i) => (
-          <div
-            key={i}
-            onClick={() => onClick?.(item.message)}
-            className={`relative p-3 rounded-lg bg-gray-800/30 backdrop-blur-sm transition-all duration-200 group cursor-pointer ${
-              fontSize === 'small' ? 'text-sm' :
-              fontSize === 'large' ? 'text-lg' :
-              'text-base'
-            } ${
-              item.originalIndex === currentIndex
-                ? 'border border-blue-500 shadow-lg shadow-blue-500/20'
-                : 'border border-gray-700/30 hover:border-gray-600/50'
-            }`}
-          >
-            {item.message}
+          <div className="flex items-start justify-between gap-2 group">
+            <div
+              key={i}
+              onClick={() => !disabled && onClick?.(item.message)}
+              className={`flex-1 p-3 rounded-lg bg-gray-800/30 backdrop-blur-sm transition-all duration-200 ${
+                disabled ? 'cursor-not-allowed text-gray-500' : 'cursor-pointer'
+              } ${
+                fontSize === 'small' ? 'text-sm' :
+                fontSize === 'large' ? 'text-lg' :
+                'text-base'
+              } ${
+                item.originalIndex === currentIndex
+                  ? 'border border-blue-500 shadow-lg shadow-blue-500/20'
+                  : 'border border-gray-700/30 hover:border-gray-600/50'
+              }`}
+            >
+              {item.message}
+            </div>
             <Button
               variant="secondary"
               onClick={(e) => {
                 e.stopPropagation();
                 onDelete(item.originalIndex);
               }}
-              className="absolute right-2 top-1/2 -translate-y-1/2 opacity-20 group-hover:opacity-100 !p-1.5 !bg-gray-700/40 hover:!bg-red-500/20 text-gray-300 hover:text-red-400 rounded-md border border-gray-600/30 hover:border-red-400/30"
+              className="self-center opacity-20 group-hover:opacity-100 !p-1.5 !bg-gray-700/40 hover:!bg-red-500/20 text-gray-300 hover:text-red-400 rounded-md border border-gray-600/30 hover:border-red-400/30"
               aria-label={t('history.delete')}
             >
               <Trash2 size={16} />
