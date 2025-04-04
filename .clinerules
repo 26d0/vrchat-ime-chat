@@ -1,0 +1,76 @@
+# VRChat IME Chat Project Rules
+
+## Project Overview
+- A desktop application for VRChat IME chat functionality
+- Built with Wails (Go backend + React/TypeScript frontend)
+- Provides chat interface and IME support for VRChat users
+
+## Tech Stack
+- Backend: Go
+- Frontend: React + TypeScript
+- Build Tool: Wails
+- UI Framework: Tailwind CSS
+- Package Manager: pnpm (frontend)
+- Internationalization: i18next
+
+## Directory Structure
+/
+├── frontend/           # React/TypeScript frontend application
+│   ├── src/           # Source code
+│   │   ├── components/# React components
+│   │   ├── hooks/     # Custom React hooks
+│   │   ├── locales/   # i18n translation files
+│   │   ├── stores/    # State management
+│   │   ├── types/     # TypeScript type definitions
+│   │   └── utils/     # Utility functions
+├── website/           # Project website (Astro based)
+└── build/            # Build output directory
+
+## Key Components
+- ChatForm: Main chat interface component
+- MessageHistory: Chat history management
+- SettingsDialog: Application settings
+- WindowControls: Custom window controls
+- TitleBar: Custom window title bar
+
+## Features
+- VRChat chat integration
+- IME (Input Method Editor) support
+- Multi-language support (en, ja, kip)
+- Customizable themes
+- Configurable shortcuts
+- Typing status indicators
+- Font size customization
+
+## Development Guidelines
+1. Use TypeScript for all frontend code
+2. Follow React functional component patterns with hooks
+3. Implement i18n for all user-facing strings
+4. Use Tailwind CSS for styling
+5. Maintain proper type definitions in types/ directory
+6. Keep components modular and focused
+7. Use custom hooks for shared logic
+
+## Project Conventions
+- Component organization: feature-based directories under src/components/
+- State management: Zustand for global state (useSettingsStore)
+- Hooks naming: use* prefix for custom hooks
+- Utils: standalone utility functions in utils/ directory
+- Types: shared type definitions in types/ directory
+
+## Important Files
+- main.go: Go backend entry point
+- app.go: Core application logic
+- frontend/src/App.tsx: Frontend root component
+- frontend/src/main.tsx: Frontend entry point
+- wails.json: Wails configuration
+- frontend/package.json: Frontend dependencies
+
+## Build & Development
+- Build tool: Wails
+- Package manager: pnpm (frontend)
+- Development setup requires:
+  - Go environment
+  - Node.js
+  - pnpm
+  - Wails CLI

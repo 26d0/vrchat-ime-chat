@@ -4,10 +4,10 @@ import { SettingsButton } from "../settings/SettingsDialog";
 export function WindowControls() {
   return (
     <div className="fixed top-0 right-0 flex items-center h-8 bg-transparent titlebar-no-drag z-10">
-      <div className="px-2">
+      <div className="px-2 titlebar-no-drag">
         <SettingsButton />
       </div>
-      <div className="flex items-center px-2 space-x-2">
+      <div className="flex items-center px-2 space-x-2 titlebar-no-drag">
         <button
           onClick={() => WindowMinimise()}
           className="p-1 hover:bg-gray-700 rounded"

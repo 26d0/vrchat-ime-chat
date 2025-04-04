@@ -32,11 +32,12 @@ func main() {
 		Windows: &windows.Options{
 			WindowIsTranslucent:  false,
 			WebviewIsTransparent: false,
-			DisableWindowIcon:    false,
+			DisableWindowIcon:    true,
 			Theme:                windows.Dark,
 			CustomTheme: &windows.ThemeSettings{
 				DarkModeTitleBar: 1,
 			},
+			DisableFramelessWindowDecorations: true,
 		},
 		AlwaysOnTop: true,
 		Frameless:   true,

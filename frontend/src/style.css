@@ -116,3 +116,12 @@ div[data-sonner-toaster] {
 .window-content {
   border-right: none !important;
 }
+
+/* Window dragging */
+[data-wails-drag] {
+  --wails-draggable: drag;
+}
+
+.titlebar-no-drag {
+  --wails-draggable: no-drag;
+}
