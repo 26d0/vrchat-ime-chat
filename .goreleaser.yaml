@@ -1,0 +1,61 @@
+before:
+  hooks:
+    - go mod tidy
+    - wails build
+
+builds:
+  - id: vrchat-ime-chat
+    dir: .
+    binary: vic
+    env:
+      - CGO_ENABLED=1
+    goos:
+      - windows
+    goarch:
+      - amd64
+    main: .
+    ldflags:
+      - -s -w -H windowsgui
+    flags:
+      - -tags=production
+    hooks:
+      post: >
+        powershell -Command "
+        & 'C:\Program Files (x86)\NSIS\makensis.exe'
+        '-DPRODUCT_NAME=VRChat IME Chat'
+        '-DPRODUCT_VERSION={{ .Version }}'
+        '-DOUTPUT_NAME=dist/vic-installer.exe'
+        '-DINSTALL_FILES=dist/vrchat-ime-chat_windows_amd64_v1'
+        'installer.nsi'
+        "
+
+archives:
+  - id: portable
+    format: binary
+    builds: [vrchat-ime-chat]
+    name_template: "vic"
+    wrap_in_directory: false
+  - id: installer-files
+    format: zip
+    builds: [vrchat-ime-chat]
+    name_template: "installer-files"
+    files:
+      - README.md
+      - build/**/*
+
+release:
+  disable: true
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^Merge'

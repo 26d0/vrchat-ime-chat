@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Default dialog styling */
+dialog {
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+dialog[open] {
+  display: block;
+}
+
+/* Dialog backdrop */
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  position: fixed;
+  inset: 0;
+}
+
+/* Ensure modal content is above backdrop and isolated from page background */
+dialog > * {
+  position: relative;
+  z-index: 1;
+  background-clip: padding-box;
+  contain: paint;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Force hardware acceleration for dialog */
+dialog {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+/* Ensure dialog content is completely isolated */
+#settings_modal > div {
+  background-clip: border-box;
+  background-origin: border-box;
+  contain: layout style paint;
+  box-shadow: 0 0 0 1px hsl(var(--b1));
+}
+
+/* Dialog animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.15s ease-out forwards;
+}
+
+.animate-fade-out {
+  animation: fadeOut 0.15s ease-out forwards;
+}
+
+
+/* Toast positioning and styling */
+div[data-sonner-toaster] {
+  position: fixed !important;
+  /* Higher z-index than dialog */
+  z-index: 9999 !important;
+}
+
+/* Toast styling */
+[data-sonner-toast] {
+  @apply bg-base-100 border border-base-300 shadow-lg;
+}
+
+/* Success toast */
+[data-sonner-toast][data-type="success"] {
+  @apply border-success text-success-content;
+}
+
+/* Error toast */
+[data-sonner-toast][data-type="error"] {
+  @apply border-error text-error-content;
+}
+
+/* Info toast */
+[data-sonner-toast][data-type="info"] {
+  @apply border-info text-info-content;
+}
+
+.window-content {
+  border-right: none !important;
+}

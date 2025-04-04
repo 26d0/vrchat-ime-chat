@@ -1,0 +1,167 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { ChatBubbleBottomCenterTextIcon, SparklesIcon, PaintBrushIcon, RocketLaunchIcon, ArrowDownTrayIcon, CodeBracketIcon } from '@heroicons/react/24/outline';
+---
+
+<Layout>
+  <main class="max-w-[1200px] mx-auto px-6 md:px-8 overflow-hidden">
+    <header class="hero min-h-[80vh] -mt-16 pt-20 backdrop-blur-sm">
+      <div class="hero-content text-center">
+        <div class="max-w-3xl animate-fade-up">
+          <h1 class="text-6xl md:text-7xl font-semibold gradient-text tracking-tight leading-none mb-8">
+            VRChat IME Chat
+          </h1>
+          <p class="text-xl md:text-2xl mb-14 text-zinc-600 tracking-tight">
+            Windows IMEで快適な日本語入力を。<br class="hidden md:inline">VRChatをもっと楽しく。
+          </p>
+          <div class="flex gap-4 justify-center flex-wrap">
+            <a href="/downloaded"
+               class="btn btn-primary btn-lg px-8 py-4 gap-2 text-lg">
+              <ArrowDownTrayIcon className="w-6 h-6" />
+              ダウンロード
+            </a>
+            <a href="https://github.com/26d0/vrchat-ime-chat"
+               class="btn btn-lg px-8 py-4 gap-2 text-lg bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-100 hover:from-zinc-700 hover:to-zinc-800 shadow-lg shadow-zinc-900/10 hover:shadow-xl hover:shadow-zinc-900/20">
+              <CodeBracketIcon className="w-6 h-6" />
+              GitHubで見る
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="py-16">
+      <h2 class="text-4xl md:text-5xl font-semibold text-center mb-16 gradient-text tracking-tight">
+        機能紹介
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div class="card p-8 group">
+          <div class="mb-6 transform transition-transform group-hover:scale-105 duration-300">
+            <ChatBubbleBottomCenterTextIcon className="w-12 h-12" />
+          </div>
+          <h3 class="text-2xl font-semibold mb-4 tracking-tight">日本語入力サポート</h3>
+          <p class="text-zinc-600 leading-relaxed">Windows IMEを使用して、VRChatでスムーズに日本語入力が可能</p>
+        </div>
+
+        <div class="card p-8 group">
+          <div class="mb-6 transform transition-transform group-hover:scale-105 duration-300">
+            <SparklesIcon className="w-12 h-12" />
+          </div>
+          <h3 class="text-2xl font-semibold mb-4 tracking-tight">簡単操作</h3>
+          <p class="text-zinc-600 leading-relaxed">VRChatのチャットシステムと自然に統合された、シンプルなインターフェース</p>
+        </div>
+
+        <div class="card p-8 group">
+          <div class="mb-6 transform transition-transform group-hover:scale-105 duration-300">
+            <PaintBrushIcon className="w-12 h-12" />
+          </div>
+          <h3 class="text-2xl font-semibold mb-4 tracking-tight">カスタマイズ可能</h3>
+          <p class="text-zinc-600 leading-relaxed">フォントサイズ、テーマ、キーボードショートカットなど、好みに合わせて設定可能</p>
+        </div>
+
+        <div class="card p-8 group">
+          <div class="mb-6 transform transition-transform group-hover:scale-105 duration-300">
+            <RocketLaunchIcon className="w-12 h-12" />
+          </div>
+          <h3 class="text-2xl font-semibold mb-4 tracking-tight">軽量設計</h3>
+          <p class="text-zinc-600 leading-relaxed">バックグラウンドで静かに動作し、システムリソースの使用を最小限に抑制</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-32 text-center">
+      <div class="max-w-2xl mx-auto px-6 animate-fade-up">
+        <h2 class="text-4xl md:text-5xl font-semibold mb-8 tracking-tight gradient-text">
+          始めてみませんか？
+        </h2>
+        <p class="text-xl text-zinc-600 mb-12 leading-relaxed">
+          VRChatでのコミュニケーションを、<br class="hidden md:inline">もっとスムーズに。
+        </p>
+        <a href="/downloaded"
+           class="btn btn-primary btn-lg px-12 py-4 gap-2 text-lg inline-flex items-center">
+          <ArrowDownTrayIcon className="w-6 h-6" />
+          ダウンロード
+        </a>
+      </div>
+    </section>
+
+    <section class="py-16 bg-zinc-50">
+      <div class="max-w-5xl mx-auto px-6">
+        <h2 class="text-4xl md:text-5xl font-semibold text-center mb-16 gradient-text tracking-tight">
+          システム要件
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="card bg-white p-8">
+            <h3 class="text-2xl font-semibold mb-4 tracking-tight">必要環境</h3>
+            <ul class="space-y-3 text-zinc-600">
+              <li>• Windows 10/11</li>
+              <li>• VRChat</li>
+              <li>• 日本語IME</li>
+            </ul>
+            <p class="mt-4 text-zinc-500 text-sm">※ポータブルアプリケーションのため、インストール作業は不要です</p>
+          </div>
+          <div class="card bg-white p-8">
+            <h3 class="text-2xl font-semibold mb-4 tracking-tight">推奨スペック</h3>
+            <ul class="space-y-3 text-zinc-600">
+              <li>• メモリ: 4GB以上</li>
+              <li>• ストレージ: 100MB以上の空き容量</li>
+              <li>• ディスプレイ: 1280x720以上の解像度</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="mt-32 bg-zinc-900 text-zinc-400">
+    <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-16">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div>
+          <h3 class="text-xl font-semibold text-white mb-4">VRChat IME Chat</h3>
+          <p class="text-sm leading-relaxed">
+            VRChatでの日本語入力をより快適にするために開発された
+            オープンソースのデスクトップアプリケーションです。
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-white mb-4">リンク</h3>
+          <ul class="space-y-2">
+            <li>
+              <a href="https://github.com/26d0/vrchat-ime-chat" class="hover:text-white transition-colors">
+                GitHub
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/26d0/vrchat-ime-chat/issues" class="hover:text-white transition-colors">
+                バグ報告
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/26d0/vrchat-ime-chat/releases" class="hover:text-white transition-colors">
+                リリースノート
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-white mb-4">法的情報</h3>
+          <ul class="space-y-2">
+            <li>
+              <a href="https://github.com/26d0/vrchat-ime-chat/blob/main/LICENSE" class="hover:text-white transition-colors">
+                ライセンス
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/26d0/vrchat-ime-chat/blob/main/PRIVACY.md" class="hover:text-white transition-colors">
+                プライバシーポリシー
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-12 pt-8 border-t border-zinc-800 text-center text-sm">
+        <p>© 2024 VRChat IME Chat. MIT License.</p>
+      </div>
+    </div>
+  </footer>
+</Layout>
