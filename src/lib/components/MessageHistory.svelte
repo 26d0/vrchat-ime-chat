@@ -116,7 +116,7 @@
   const filteredMessages = $derived(filterMessages(groupedMessages, searchQuery));
 </script>
 
-<Card class="flex-1 flex flex-col min-h-0 w-full">
+<Card class="h-full flex flex-col">
   <!-- <CardHeader class="shrink-0">
     <div class="flex items-center justify-between">
       <CardTitle class="flex items-center gap-2">
@@ -125,8 +125,8 @@
       </CardTitle>
     </div>
   </CardHeader> -->
-  <CardContent class="flex-1 min-h-0">
-    <ScrollArea class="h-full">
+  <CardContent class="flex-1 min-h-0 p-4">
+    <ScrollArea class="h-full w-full">
       {#if filteredMessages.length === 0}
         <div class="h-full flex items-center justify-center text-center text-gray-500 dark:text-gray-400">
           <div>
@@ -140,7 +140,7 @@
           </div>
         </div>
       {:else}
-        <div class="space-y-3">
+        <div class="space-y-3 pr-4">
           {#each filteredMessages as message}
             <div class="flex items-start gap-2">
               <!-- svelte-ignore a11y_click_events_have_key_events -->

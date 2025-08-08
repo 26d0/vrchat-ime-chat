@@ -87,29 +87,37 @@
 </script>
 
 <div class="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
-  <!-- Custom title bar -->
-  <TitleBar />
+  <!-- Custom title bar - Fixed position -->
+  <div class="fixed top-0 left-0 right-0 z-50">
+    <TitleBar />
+  </div>
   
-  <!-- Main content -->
-  <div class="p-4 flex flex-col" style="height: calc(100vh - 40px);">
-    <div class="w-full max-w-2xl mx-auto flex-1 flex flex-col space-y-6">
-      <!-- Message input component -->
-      <MessageInput 
-        onSendMessage={handleSendMessage} 
-        disabled={!isInitialized}
-        isSending={isSending}
-        onSearchQueryChange={handleSearchQueryChange}
-        autofillMessage={autofillMessage}
-      />
+  <!-- Main content - Offset by title bar height -->
+  <div class="fixed inset-0" style="top: 40px;">
+    <div class="h-full p-4 flex flex-col">
+      <div class="w-full max-w-2xl mx-auto h-full flex flex-col space-y-6">
+        <!-- Message input component -->
+        <div class="shrink-0">
+          <MessageInput 
+            onSendMessage={handleSendMessage} 
+            disabled={!isInitialized}
+            isSending={isSending}
+            onSearchQueryChange={handleSearchQueryChange}
+            autofillMessage={autofillMessage}
+          />
+        </div>
 
-      <!-- Message history component -->
-      <MessageHistory 
-        messages={messages} 
-        onClearHistory={handleClearHistory}
-        onDeleteMessage={handleDeleteMessage}
-        searchQuery={searchQuery}
-        onMessageClick={handleMessageClick}
-      />
+        <!-- Message history component -->
+        <div class="flex-1 min-h-0">
+          <MessageHistory 
+            messages={messages} 
+            onClearHistory={handleClearHistory}
+            onDeleteMessage={handleDeleteMessage}
+            searchQuery={searchQuery}
+            onMessageClick={handleMessageClick}
+          />
+        </div>
+      </div>
     </div>
   </div>
 </div>
