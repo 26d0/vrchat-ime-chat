@@ -2,8 +2,9 @@
   import { Button } from '$lib/components/ui/button';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { ScrollArea } from '$lib/components/ui/scroll-area';
-  import { Trash2, Clock, X } from 'lucide-svelte';
-  import type { ChatMessage, GroupedMessage } from '$lib/types/chat';
+  import { Trash2, Clock, X, MoreHorizontal } from 'lucide-svelte';
+  import type { ChatMessage, GroupedMessage, SearchResult } from '$lib/types/chat';
+  import { searchMessages, getMessagesPaginated } from '$lib/utils/search';
 
   interface Props {
     messages: ChatMessage[];
@@ -18,6 +19,15 @@
   let tooltipContent = $state<Date[]>([]);
   let tooltipPosition = $state({ x: 0, y: 0 });
   let tooltipTarget = $state<HTMLElement | null>(null);
+  let isSearching = $state(false);
+  let isLoadingMore = $state(false);
+  let displayedMessages = $state<ChatMessage[]>([]);
+  let hasMore = $state(true);
+  let currentPage = $state(0);
+  let totalCount = $state(0);
+  let lastSearchQuery = $state('');
+  
+  const PAGE_SIZE = 50;
 
   function formatDate(date: Date) {
     return date.toLocaleDateString('ja-JP', {
@@ -95,16 +105,83 @@
     tooltipTarget = null;
   }
 
-  function filterMessages(messages: GroupedMessage[], query: string): GroupedMessage[] {
-    if (!query.trim()) {
-      return messages;
+  // Load initial messages or search results
+  async function loadMessages(query: string = '', page: number = 0, append: boolean = false): Promise<void> {
+    if (page === 0) {
+      isSearching = true;
+    } else {
+      isLoadingMore = true;
     }
     
-    const lowerQuery = query.toLowerCase();
-    return messages.filter(message => 
-      message.text.toLowerCase().includes(lowerQuery)
-    );
+    try {
+      let result: SearchResult;
+      
+      if (query.trim()) {
+        result = await searchMessages(messages, query, page, PAGE_SIZE);
+      } else {
+        const paginatedResult = await getMessagesPaginated(messages, page, PAGE_SIZE);
+        result = {
+          messages: paginatedResult.messages,
+          query: '',
+          total_count: paginatedResult.total_count,
+          has_more: paginatedResult.has_more
+        };
+      }
+      
+      if (append && page > 0) {
+        displayedMessages = [...displayedMessages, ...result.messages];
+      } else {
+        displayedMessages = result.messages;
+      }
+      
+      hasMore = result.has_more;
+      totalCount = result.total_count;
+      
+    } catch (error) {
+      console.error('Failed to load messages:', error);
+    } finally {
+      isSearching = false;
+      isLoadingMore = false;
+    }
   }
+
+  // Load more messages when scrolling to bottom
+  async function loadMoreMessages(): Promise<void> {
+    if (isLoadingMore || !hasMore) return;
+    
+    currentPage += 1;
+    await loadMessages(searchQuery, currentPage, true);
+  }
+
+  // Handle scroll events for infinite scrolling
+  function handleScroll(event: Event) {
+    const target = event.target as HTMLElement;
+    const scrollTop = target.scrollTop;
+    const scrollHeight = target.scrollHeight;
+    const clientHeight = target.clientHeight;
+    
+    // Load more when user scrolls near the bottom (within 100px)
+    if (scrollTop + clientHeight >= scrollHeight - 100) {
+      loadMoreMessages();
+    }
+  }
+
+  // Reset pagination when search query changes
+  $effect(() => {
+    if (searchQuery !== lastSearchQuery) {
+      currentPage = 0;
+      lastSearchQuery = searchQuery;
+      loadMessages(searchQuery, 0, false);
+    }
+  });
+
+  // Initial load when messages change
+  $effect(() => {
+    if (messages.length > 0) {
+      currentPage = 0;
+      loadMessages(searchQuery, 0, false);
+    }
+  });
 
   function handleMessageClick(messageText: string) {
     if (onMessageClick) {
@@ -112,8 +189,8 @@
     }
   }
 
-  const groupedMessages = $derived(groupMessages(messages));
-  const filteredMessages = $derived(filterMessages(groupedMessages, searchQuery));
+  // Group the displayed messages
+  const groupedMessages = $derived(groupMessages(displayedMessages));
 </script>
 
 <Card class="h-full flex flex-col">
@@ -126,8 +203,15 @@
     </div>
   </CardHeader> -->
   <CardContent class="flex-1 min-h-0 p-4">
-    <ScrollArea class="h-full w-full">
-      {#if filteredMessages.length === 0}
+    <div class="h-full w-full overflow-auto" onscroll={handleScroll}>
+      {#if isSearching}
+        <div class="h-full flex items-center justify-center text-center text-gray-500 dark:text-gray-400">
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+            <span>検索中...</span>
+          </div>
+        </div>
+      {:else if groupedMessages.length === 0 && !hasMore}
         <div class="h-full flex items-center justify-center text-center text-gray-500 dark:text-gray-400">
           <div>
             {#if searchQuery.trim()}
@@ -141,7 +225,7 @@
         </div>
       {:else}
         <div class="space-y-3 pr-4">
-          {#each filteredMessages as message}
+          {#each groupedMessages as message}
             <div class="flex items-start gap-2">
               <!-- svelte-ignore a11y_click_events_have_key_events -->
               <div 
@@ -179,9 +263,31 @@
               {/if}
             </div>
           {/each}
+          
+          <!-- Load more indicator -->
+          {#if hasMore}
+            <div class="flex justify-center py-4">
+              {#if isLoadingMore}
+                <div class="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                  <div class="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+                  <span class="text-sm">さらに読み込み中...</span>
+                </div>
+              {:else}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onclick={loadMoreMessages}
+                  class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                >
+                  <MoreHorizontal class="w-4 h-4 mr-2" />
+                  さらに表示 ({totalCount - displayedMessages.length}件)
+                </Button>
+              {/if}
+            </div>
+          {/if}
         </div>
       {/if}
-    </ScrollArea>
+    </div>
   </CardContent>
 </Card>
 

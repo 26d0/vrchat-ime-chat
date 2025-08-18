@@ -91,7 +91,7 @@
         {:else if chatMessage.trim()}
           <span class="flex items-center gap-1">
             <Search class="w-3 h-3" />
-            履歴を検索中 | Shift + Enterで改行、Enterで送信
+            ファジー検索中 | Shift + Enterで改行、Enterで送信
           </span>
         {:else}
           Shift + Enterで改行、Enterで送信

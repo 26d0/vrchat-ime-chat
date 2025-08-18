@@ -15,3 +15,18 @@ export interface ChatStoreState {
   messages: ChatMessage[];
   isInitialized: boolean;
 }
+
+export interface SearchResult {
+  messages: ChatMessage[];
+  query: string;
+  total_count: number;
+  has_more: boolean;
+}
+
+export interface PaginatedResult {
+  messages: ChatMessage[];
+  total_count: number;
+  has_more: boolean;
+  page: number;
+  page_size: number;
+}

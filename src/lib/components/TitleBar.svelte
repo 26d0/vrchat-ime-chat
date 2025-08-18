@@ -48,7 +48,7 @@
     on:mousedown={startDrag}
   >
     <div class="flex items-center h-full px-3">
-      <span class="text-md font-medium text-gray-700 dark:text-gray-200 wdxl-lubrifont-jp-n-regular">IME Chat</span>
+      <span class="text-md font-medium text-gray-700 dark:text-gray-200 wdxl-lubrifont-jp-n-regular">IMEChat</span>
     </div>
   </div>
   
