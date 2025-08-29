@@ -32,7 +32,10 @@ export class ChatStore {
 
   async initialize() {
     try {
-      this.store = await Store.load(this.STORE_FILE, { autoSave: true });
+      this.store = await Store.load(this.STORE_FILE, { 
+        autoSave: true,
+        defaults: {}
+      });
       this.isInitialized = true;
       await this.loadHistory();
       this.notifyUpdate();
