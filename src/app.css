@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+.wdxl-lubrifont-jp-n-regular {
+  font-family: "WDXL Lubrifont JP N", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  /* Tokyo Night Light theme */
+  --background: hsl(215 28% 92%); /* #e6e7ed */
+  --foreground: hsl(226 36% 27%); /* #343b58 */
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(226 36% 27%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(226 36% 27%);
+  --primary: hsl(213 87% 44%); /* #2959aa */
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(210 14% 89%);
+  --secondary-foreground: hsl(226 36% 27%);
+  --muted: hsl(210 14% 89%);
+  --muted-foreground: hsl(216 13% 44%); /* #6c6e75 */
+  --accent: hsl(195 100% 26%); /* #006c86 */
+  --accent-foreground: hsl(0 0% 100%);
+  --destructive: hsl(352 74% 47%); /* #8c4351 */
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(210 14% 89%);
+  --input: hsl(210 14% 89%);
+  --ring: hsl(213 87% 44%);
+  --chart-1: hsl(213 87% 44%); /* #2959aa */
+  --chart-2: hsl(159 83% 31%); /* #385f0d */
+  --chart-3: hsl(195 100% 26%); /* #006c86 */
+  --chart-4: hsl(38 92% 32%); /* #8f5e15 */
+  --chart-5: hsl(254 51% 40%); /* #5a3e8e */
+  --radius: 0.6rem;
+  --sidebar-background: hsl(0 0% 100%);
+  --sidebar-foreground: hsl(226 36% 27%);
+  --sidebar-primary: hsl(213 87% 44%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(210 14% 89%);
+  --sidebar-accent-foreground: hsl(226 36% 27%);
+  --sidebar-border: hsl(210 14% 89%);
+  --sidebar-ring: hsl(213 87% 44%);
+}
+
+.dark {
+  /* Tokyo Night Storm theme */
+  --background: hsl(230 23% 14%); /* #24283b */
+  --foreground: hsl(225 25% 77%); /* #a9b1d6 */
+  --card: hsl(230 18% 19%); /* #2d3343 */
+  --card-foreground: hsl(225 25% 77%);
+  --popover: hsl(230 18% 19%);
+  --popover-foreground: hsl(225 25% 77%);
+  --primary: hsl(217 92% 76%); /* #7aa2f7 */
+  --primary-foreground: hsl(230 23% 14%);
+  --secondary: hsl(227 18% 33%); /* #414868 */
+  --secondary-foreground: hsl(225 25% 77%);
+  --muted: hsl(227 18% 33%);
+  --muted-foreground: hsl(227 17% 45%); /* #565f89 */
+  --accent: hsl(189 71% 73%); /* #73daca */
+  --accent-foreground: hsl(230 23% 14%);
+  --destructive: hsl(357 79% 76%); /* #f7768e */
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(227 18% 33%);
+  --input: hsl(227 18% 33%);
+  --ring: hsl(217 92% 76%);
+  --chart-1: hsl(217 92% 76%); /* #7aa2f7 */
+  --chart-2: hsl(95 71% 67%); /* #9ece6a */
+  --chart-3: hsl(189 71% 73%); /* #73daca */
+  --chart-4: hsl(45 82% 65%); /* #e0af68 */
+  --chart-5: hsl(262 83% 74%); /* #bb9af7 */
+  --sidebar-background: hsl(230 23% 14%);
+  --sidebar-foreground: hsl(225 25% 77%);
+  --sidebar-primary: hsl(217 92% 76%);
+  --sidebar-primary-foreground: hsl(230 23% 14%);
+  --sidebar-accent: hsl(227 18% 33%);
+  --sidebar-accent-foreground: hsl(225 25% 77%);
+  --sidebar-border: hsl(227 18% 33%);
+  --sidebar-ring: hsl(217 92% 76%);
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Tokyo Night Scrollbar Styles */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--muted-foreground);
+    border-radius: 4px;
+    opacity: 0.6;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+    opacity: 0.8;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: var(--background);
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted-foreground) var(--background);
+  }
+
+  /* Dark mode scrollbar adjustments */
+  .dark ::-webkit-scrollbar-thumb {
+    background: hsl(227 17% 45%); /* #565f89 - Tokyo Night comment color */
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: hsl(189 71% 73%); /* #73daca - Tokyo Night accent color */
+  }
+
+  .dark * {
+    scrollbar-color: hsl(227 17% 45%) hsl(230 23% 14%);
+  }
+}
